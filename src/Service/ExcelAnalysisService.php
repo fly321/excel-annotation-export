@@ -66,9 +66,10 @@ class ExcelAnalysisService
         $this->sheet->setTitle($this->shellName);
         $this->sheet->getDefaultColumnDimension()->setWidth($this->getDefaultWidth());
         $this->sheet->getDefaultRowDimension()->setRowHeight($this->getDefaultHeight());
-        $this->sheet->getStyle('A1:Z1')->getFont()->setBold(true);
-        // 首行写入
         $columnIndex = 'A';
+        $endColumnIndex = ord($columnIndex) + count($this->columnData) - 1;
+        $this->sheet->getStyle('A1:'. chr($endColumnIndex) .'1')->getFont()->setBold(true);
+        // 首行写入
         foreach ($this->columnData as $column => $columnAnnotation) {
             $this->sheet->setCellValue($columnIndex . '1', $columnAnnotation->columnFieldMapping);
             $this->sheet->getColumnDimension($columnIndex)->setWidth($columnAnnotation->columnWidth);
