@@ -19,6 +19,11 @@ class ExcelColumnAnnotation
     public string $columnFieldMapping;
 
     /**
+     * @var bool 是否居中
+     */
+    public bool $isCenter = true;
+
+    /**
      * ExcelColumnAnnotation constructor.
      * @param string $columnName
      * @param string|null $columnFieldMapping
@@ -28,9 +33,11 @@ class ExcelColumnAnnotation
         string $columnName,
         string $columnFieldMapping = null,
         int $columnWidth = 20,
+        bool $isCenter = true
     ) {
         $this->columnName = $columnName;
         $this->columnWidth = $columnWidth;
+        $this->isCenter = $isCenter;
         if (empty($columnFieldMapping)) {
             $this->columnFieldMapping = camelToSnake($columnName);
         } else {

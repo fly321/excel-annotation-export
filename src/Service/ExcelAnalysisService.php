@@ -4,6 +4,7 @@ namespace Fly\ExcelAnnotationExport\Service;
 
 use Fly\ExcelAnnotationExport\Annotation\ExcelColumnAnnotation;
 use Fly\ExcelAnnotationExport\Annotation\ExcelShellAnnotation;
+use PhpOffice\PhpSpreadsheet\IOFactory as IOFactoryAlias;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use ReflectionAttribute;
@@ -72,6 +73,10 @@ class ExcelAnalysisService
         // 首行写入
         foreach ($this->columnData as $column => $columnAnnotation) {
             $this->sheet->setCellValue($columnIndex . '1', $columnAnnotation->columnFieldMapping);
+            // 居中
+            if ($columnAnnotation->isCenter) {
+                $this->sheet->getStyle($columnIndex . '1')->getAlignment()->setHorizontal('center');
+            }
             $this->sheet->getColumnDimension($columnIndex)->setWidth($columnAnnotation->columnWidth);
             $columnIndex++;
         }
@@ -92,19 +97,21 @@ class ExcelAnalysisService
             $columnIndex = 'A';
             foreach ($this->columnData as $column => $columnAnnotation) {
                 $this->sheet->setCellValue($columnIndex . $index, $data[$column]);
+                if ($columnAnnotation->isCenter) {
+                    $this->sheet->getStyle($columnIndex . $index)->getAlignment()->setHorizontal('center');
+                }
                 $columnIndex++;
             }
             $index++;
         }
         if ($isFile) {
-            $this->spreadsheet->getActiveSheet()->setTitle($this->shellName);
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($this->spreadsheet, 'Xlsx');
+            $writer = IOFactoryAlias::createWriter($this->spreadsheet, 'Xlsx');
             $writer->save($fileName);
         } else {
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="' . $fileName . '"');
             header('Cache-Control: max-age=0');
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($this->spreadsheet, 'Xlsx');
+            $writer = IOFactoryAlias::createWriter($this->spreadsheet, 'Xlsx');
             $writer->save('php://output');
         }
     }
