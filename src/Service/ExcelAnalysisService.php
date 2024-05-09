@@ -2,6 +2,7 @@
 
 namespace Fly\ExcelAnnotationExport\Service;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Fly\ExcelAnnotationExport\Annotation\ExcelColumnAnnotation;
 use Fly\ExcelAnnotationExport\Annotation\ExcelShellAnnotation;
 use PhpOffice\PhpSpreadsheet\IOFactory as IOFactoryAlias;
@@ -43,15 +44,15 @@ class ExcelAnalysisService
      */
     public function analysisColumn(string $class): self
     {
+        $annotationReader = new AnnotationReader();
         $classReflection = new ReflectionClass($class);
         // 反射获取类的所有属性
         $properties = $classReflection->getProperties();
         foreach ($properties as $property) {
-            // 获取属性的注解
-            $attributes = $property->getAttributes(ExcelColumnAnnotation::class, ReflectionAttribute::IS_INSTANCEOF);
-            foreach ($attributes as $attribute) {
-                $this->columnData[$attribute->getArguments()["columnName"]] = new ExcelColumnAnnotation(...$attribute->getArguments());
-            }
+            // 获取属性的注
+            $propertyAnnotation = $annotationReader->getPropertyAnnotation($property, ExcelColumnAnnotation::class);
+            $columnAnnotation = new ExcelColumnAnnotation((array)$propertyAnnotation);
+            $this->columnData[$columnAnnotation->columnName] = $columnAnnotation;
         }
         return $this;
     }

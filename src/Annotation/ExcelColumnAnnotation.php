@@ -2,47 +2,43 @@
 
 namespace Fly\ExcelAnnotationExport\Annotation;
 
-#[\Attribute(\Attribute::TARGET_PROPERTY)]
+/**
+ * @Annotation
+ * @Target({"PROPERTY"})
+ */
 class ExcelColumnAnnotation
 {
     /**
      * @var string|null $columnName 字段名
      */
-    public ?string $columnName;
+    public $columnName;
     /**
      * @var int|null $columnWidth 列宽
      */
-    public ?int $columnWidth;
+    public $columnWidth;
     /**
      * @var string|null $columnFieldMapping 字段映射
      */
-    public ?string $columnFieldMapping;
+    public $columnFieldMapping;
 
     /**
      * @var string|null $horizontal 水平对齐方式
      */
-    public ?string $horizontal = 'center';
+    public $horizontal = 'center';
 
     /**
      * ExcelColumnAnnotation constructor.
-     * @param string|null $columnName
-     * @param string|null $columnFieldMapping
-     * @param int|null $columnWidth
-     * @param string|null $horizontal
+     * @param array $array ['columnName' => '字段名', 'columnWidth' => '列宽', 'columnFieldMapping' => '字段映射', 'horizontal' => 'center']
      */
-    public function __construct(
-        ?string $columnName = null,
-        ?string $columnFieldMapping = null,
-        ?int $columnWidth = 20,
-        ?string $horizontal = 'center'
-    ) {
-        $this->columnName = $columnName;
-        $this->columnWidth = $columnWidth;
-        $this->horizontal = $horizontal;
-        if (empty($columnFieldMapping)) {
-            $this->columnFieldMapping = camelToSnake($columnName);
+    public function __construct(array $array = [])
+    {
+        $this->columnName = $array["columnName"] ?? null;
+        $this->columnWidth = $array['columnWidth'] ?? null;
+        $this->horizontal = $array['horizontal'] ?? 'center';
+        if (empty($array['columnFieldMapping'] ?? null)) {
+            $this->columnFieldMapping = camelToSnake($this->columnName);
         } else {
-            $this->columnFieldMapping = $columnFieldMapping;
+            $this->columnFieldMapping = $array['columnFieldMapping'];
         }
     }
 
