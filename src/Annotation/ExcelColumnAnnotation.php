@@ -6,38 +6,39 @@ namespace Fly\ExcelAnnotationExport\Annotation;
 class ExcelColumnAnnotation
 {
     /**
-     * @var string $columnName 字段名
+     * @var string|null $columnName 字段名
      */
-    public string $columnName;
+    public ?string $columnName;
     /**
-     * @var int $columnWidth 列宽
+     * @var int|null $columnWidth 列宽
      */
-    public int $columnWidth;
+    public ?int $columnWidth;
     /**
-     * @var string $columnFieldMapping 字段映射
+     * @var string|null $columnFieldMapping 字段映射
      */
-    public string $columnFieldMapping;
+    public ?string $columnFieldMapping;
 
     /**
-     * @var bool 是否居中
+     * @var string|null $horizontal 水平对齐方式
      */
-    public bool $isCenter = true;
+    public ?string $horizontal = 'center';
 
     /**
      * ExcelColumnAnnotation constructor.
-     * @param string $columnName
+     * @param string|null $columnName
      * @param string|null $columnFieldMapping
-     * @param int $columnWidth
+     * @param int|null $columnWidth
+     * @param string|null $horizontal
      */
     public function __construct(
-        string $columnName,
-        string $columnFieldMapping = null,
-        int $columnWidth = 20,
-        bool $isCenter = true
+        ?string $columnName = null,
+        ?string $columnFieldMapping = null,
+        ?int $columnWidth = 20,
+        ?string $horizontal = 'center'
     ) {
         $this->columnName = $columnName;
         $this->columnWidth = $columnWidth;
-        $this->isCenter = $isCenter;
+        $this->horizontal = $horizontal;
         if (empty($columnFieldMapping)) {
             $this->columnFieldMapping = camelToSnake($columnName);
         } else {

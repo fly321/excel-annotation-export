@@ -73,10 +73,7 @@ class ExcelAnalysisService
         // 首行写入
         foreach ($this->columnData as $column => $columnAnnotation) {
             $this->sheet->setCellValue($columnIndex . '1', $columnAnnotation->columnFieldMapping);
-            // 居中
-            if ($columnAnnotation->isCenter) {
-                $this->sheet->getStyle($columnIndex . '1')->getAlignment()->setHorizontal('center');
-            }
+            $this->sheet->getStyle($columnIndex . '1')->getAlignment()->setHorizontal($columnAnnotation->horizontal);
             $this->sheet->getColumnDimension($columnIndex)->setWidth($columnAnnotation->columnWidth);
             $columnIndex++;
         }
@@ -90,28 +87,26 @@ class ExcelAnalysisService
      * @param string $fileName
      * @return void
      */
-    public function writeData(array $listData, bool $isFile = false, string $fileName = ''): void
+    public function writeData(array $listData, bool $isFile = false, string $fileName = '', string $writeType = IOFactoryAlias::READER_XLSX): void
     {
         $index = 2;
         foreach ($listData as $data) {
             $columnIndex = 'A';
             foreach ($this->columnData as $column => $columnAnnotation) {
                 $this->sheet->setCellValue($columnIndex . $index, $data[$column]);
-                if ($columnAnnotation->isCenter) {
-                    $this->sheet->getStyle($columnIndex . $index)->getAlignment()->setHorizontal('center');
-                }
+                $this->sheet->getStyle($columnIndex . $index)->getAlignment()->setHorizontal($columnAnnotation->horizontal);
                 $columnIndex++;
             }
             $index++;
         }
         if ($isFile) {
-            $writer = IOFactoryAlias::createWriter($this->spreadsheet, 'Xlsx');
+            $writer = IOFactoryAlias::createWriter($this->spreadsheet, $writeType);
             $writer->save($fileName);
         } else {
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="' . $fileName . '"');
             header('Cache-Control: max-age=0');
-            $writer = IOFactoryAlias::createWriter($this->spreadsheet, 'Xlsx');
+            $writer = IOFactoryAlias::createWriter($this->spreadsheet, $writeType);
             $writer->save('php://output');
         }
     }
