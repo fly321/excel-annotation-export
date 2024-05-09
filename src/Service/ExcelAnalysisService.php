@@ -19,23 +19,23 @@ class ExcelAnalysisService
     /**
      * @var string $shellName
      */
-    protected string $shellName;
+    protected $shellName;
 
     /**
      * @var ExcelColumnAnnotation[] $columnData
      */
-    protected array $columnData = [];
+    protected $columnData = [];
 
-    protected Spreadsheet $spreadsheet;
+    protected $spreadsheet;
 
     /**
      * @var int $defaultWidth 默认列宽
      */
-    protected int $defaultWidth = 40;
+    protected $defaultWidth = 40;
     /**
      * @var int $defaultHeight 默认行高
      */
-    protected int $defaultHeight = 20;
+    protected $defaultHeight = 20;
 
     /**
      * @param string $class
