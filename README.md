@@ -1,8 +1,8 @@
 # excel-annotation-export [excel注解导出]
 
-> PHP版本要求 >= 8.0
+> PHP版本要求 >= 7.1
 >
-> 仅支持PHP8注解方式
+> 仅支持PHP7注解方式
 
 ## 安装
 ```shell
